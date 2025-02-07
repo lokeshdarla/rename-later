@@ -1,7 +1,7 @@
 import { NotFoundError, UnauthorizedError } from "../errors/custom-error";
 import UserService from "../users/user.service";
 
-class AuthService {
+export class AuthService {
   private userService: UserService
 
   constructor() {
