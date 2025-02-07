@@ -1,6 +1,7 @@
 // src/services/UserService.ts
 import { PrismaClient } from '@prisma/client';
 import { IUser } from './user.entity';
+import bcrypt from 'bcryptjs';
 
 class UserService {
   private prismaService: PrismaClient;
@@ -12,11 +13,12 @@ class UserService {
   // Create a new user
   async createUser(username: string, email: string, password: string): Promise<IUser> {
     try {
+      const hashedPassword = await bcrypt.hash(password, 10);
       return await this.prismaService.user.create({
         data: {
           username,
           email,
-          password, // In a production environment, you should hash the password
+          password: hashedPassword, // In a production environment, you should hash the password
         },
       });
     } catch (error) {
@@ -53,11 +55,12 @@ class UserService {
   // Update user details
   async updateUser(username: string, email: string, password: string): Promise<IUser> {
     try {
+      const hashedPassword = await bcrypt.hash(password, 10);
       return await this.prismaService.user.update({
         where: { username },
         data: {
           email,
-          password, // In a production environment, you should hash the password
+          password: hashedPassword, // In a production environment, you should hash the password
         },
       });
     } catch (error) {
